@@ -1,31 +1,130 @@
-/* .quiz-container{
-    background-color: aliceblue;
-    border-radius: 150px;
-
-    box-shadow: 0px 2px 10px rgba(0,0,0,.1);
-    padding: 10px;
-    text-align: center;}
-
-
-.choices { 
-    margin-top: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    align-items: center;
+/* Style.css */
+ 
+* { 
+    box-sizing: border-box;
+    font-family: sans-serif, Times, "Times New Roman", serif; 
+} 
+:root{
+    background-color: rgb(29, 26, 26)
 }
 
-.btn {
-    background-color: #0056b3; 
-    color: floralwhite;
-    border: none;
-    border-radius: 4px;
-    padding: 5px 10px;
-    cursor: pointer;
-}
-.btn:hover {
-    background-color: #0056b3;
-}
-#next-btn {
-    margin-top: 10px;
+
+
+#top { 
+    color: royalblue; 
+} 
+
+ .quiz, .scores { 
+    margin: 50px auto 0 auto; 
+    max-width: 400px; 
+} 
+.containerNew { 
+    border: 5px solid; 
+    position: absolute; 
+    top: 50%; 
+    left: 50%; 
+    height: 580px; 
+    width: 50%; 
+    transform: translate(-50%, -50%); 
+    padding: 10px; 
+    background-color: #ffffff;
+} 
+ 
+p { 
+    margin: 15px 15px; 
+} 
+ 
+.landing { 
+    text-align: center; 
+} 
+ 
+.scoresHeader { 
+    position: absolute; 
+    top: 15px; 
+    left: 15px; 
+} 
+ 
+.timer { 
+    position: absolute; 
+    top: 15px; 
+    right: 15px; 
+} 
+
+ /* #view-high-scores-btn{
+    background: linear-gradient(90deg, royalblue, );
 } */
+
+button { 
+    display: inline-block; 
+    margin: 10px; 
+    cursor: pointer; 
+    color: white; 
+    background-color: royalblue; 
+    border-radius: 5px; 
+    border: 0; 
+    padding: 20px; 
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+} 
+ 
+button:hover { 
+    background-color: lightblue; 
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+
+  }
+
+.options button { 
+    display: block; 
+} 
+ 
+input[type="text"] { 
+    font-size: 100%; 
+} 
+ 
+.hide { 
+    display: none; 
+} 
+ 
+.feedback { 
+    font-style: bold; 
+    font-size: 120%; 
+    margin-top: 20px; 
+    padding-top: 15px; 
+    color: #fff; 
+    border-top: 2px solid #4B0082; 
+} 
+ 
+ol { 
+    padding-left: 15px; 
+    max-height: 600px; 
+    overflow: auto; 
+} 
+ 
+li { 
+    padding: 5px; 
+    list-style: decimal inside none; 
+} 
+ 
+li:nth-child(odd) { 
+    background-color: #dfdae7; 
+} 
+ 
+@media screen and (max-width: 768px) { 
+    .containerNew { 
+        width: 80%; 
+    } 
+} 
+ 
+@media screen and (max-width: 575px) { 
+    .containerNew { 
+        width: 90%; 
+    } 
+ 
+    .quiz, 
+    .scores { 
+        max-width: 90%; 
+    }
+
+}
+
+
+

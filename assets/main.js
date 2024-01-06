@@ -1,97 +1,186 @@
-const questionElement = document.getElementById('question')
-const choicesElement = document.getElementById('choices')
-const nextButton = document.getElementById('next-btn')
 
 const questions = [
         {
-    
         question: "What does HTML stand for?",
-        correctAnwser: "Hyper Text Markup Language",
-        choices:   [
+        options:   [
           "Hyper Text Preprocessor",
           "Hyper Text Markup Language",
           "Hyper Text Multiple Language",
           "Hyper Tool Multi Language"
-        ]
+        ],
+        answer: "Hyper Text Markup Language"
         
       },
         {
-       
         question: "What does CSS stand for?",
-        answer: "Cascading Style Sheet",
-        choices:   [
+        options:   [
           "Common Style Sheet",
           "Colorful Style Sheet",
           "Computer Style Sheet",
           "Cascading Style Sheet"
-        ] 
+        ],
+        answer: "Cascading Style Sheet",
+
         },
         {
-        
+
         question: "What is the purpose of the `let` keyword in JavaScript?",
-        answer: "To declare a block-scoped variable.",
-        choices:   [
+        
+        options:   [
           "To declare a constant variable.",
           "To declare a block-scoped variable.",
           "To declare a global variable.",
           "To declare a variable with a specific data type."
-        ] //Answer: B. To declare a block-scoped variable.//
+        ],
+        answer: "To declare a block-scoped variable.", 
     },
       {
         
         question: "How can you comment a single line of code in JavaScript?",
-        answer: "// This is a comment",
-        choices:   [
+       
+        options:   [
           "/* This is a comment */",
           "' This is a comment '",
           "// This is a comment",
           "<!-- This is a comment -->"
-        ] //Answer: C. // This is a comment//
+        ],
+        answer: "// This is a comment", 
       },
       {
         
         question: "What is the purpose of the `addEventListener` method in JavaScript?",
-        answer: "To execute a function when a specified event occurs.",
-        choices:   [
+       
+        options:   [
           "To create a new event.",
           "To remove an event listener.",
           "To execute a function when a specified event occurs.",
           "To modify the style of an HTML element."
-        ] //Answer: C. To execute a function when a specified event occurs.//
+        ],
+        answer: "To execute a function when a specified event occurs.",
       }
-    ]
+]
+//DOM //
+const timerElement = document.querySelector('#timer');
+const landingpageElement = document.querySelector("#quiz-start");
+const questionElement = document.querySelector("#questions"); // corrected ID
+const choicesElement = document.querySelector("#options");
+const startBtn = document.querySelector('#start');
+const submitBtn = document.querySelector("#submit-score"); 
+const initialsEl = document.querySelector("#initials"); 
+const reStartBtn = document.querySelector("#restart");
+const feedbackEl = document.querySelector("#feedback");
 
-    let currentQuestion = 0
+// initial state of quiz //
+let currentQuestionIndex = 0;
+let time = questions.length * 15;
+let timerid;
 
-    function showQuestion(){
-        const question = questions[currentQuestion]
-        questionElement.textContent = question.question
-        choicesElement.innerHTML = '';
-        question.choices.forEach((choice, index) => {
-            const choiceButton = document.createElement('button');
-            choiceButton.classList.add('btn');
-            choiceButton.textContent = choice;
-            choiceButton.addEventListener('click', () => checkAnwser(index));
-            choicesElement.appendChild(choiceButton);
-    })
+// start quiz and hide front page//
+function quizstart() {
+  timerid = setInterval(clockTick, 1000);
+  timerElement.textContent = time;
+  landingpageElement.classList.add("hide");
+  questionElement.classList.remove("hide");
+  getQuestion();
+}
+
+// Loop through array of questions and create a list with buttons 
+function getQuestion() { 
+  const currentQuestion = questions[currentQuestionIndex]; 
+  const promptEl = document.getElementById("questionWords"); 
+
+  promptEl.textContent = currentQuestion.question; 
+  choicesElement.innerHTML = ""; 
+
+  currentQuestion.options.forEach(function (choice, i) { 
+    const choiceBtn = document.createElement("button"); 
+
+    choiceBtn.setAttribute("value", choice); 
+    choiceBtn.textContent = i + 1 + ". " + choice; 
+    choiceBtn.onclick = questionClick; 
+    choicesElement.appendChild(choiceBtn); 
+  }); 
+} 
+
+// Check for right answers and deduct time for wrong 
+function questionClick() {
+  if (this.value !== questions[currentQuestionIndex].answer) {
+    time -= 5; 
+    if (time < 0) { 
+      time = 0; 
     }
 
-    function checkAnwser(choiceIndex){
-        const isCorrect = choiceIndex === questions[correctQuestion].correctAnwser
+    timerElement.textContent = time;
+    feedbackEl.textContent = 'Incorrect, Try again!'
+    feedbackEl.style.color = "red";
+  } else {
+    feedbackEl.textContent = "Correct!";
+    feedbackEl.style.color = "green";
+  }
 
-        if(isCorrect){
-            choicesElement.innerHTML = '<p>Correct!</p>'
-        } 
-        else{
-            choicesElement.innerHTML = '<p>Wrong. Try again!</p>'
-        }
-    }
+  feedbackEl.classList.remove("hide"); 
+  setTimeout(function () { 
+    feedbackEl.classList.add("hide"); 
+  }, 2000);
 
-    // currentQuestion++;
-    // if(currentQuestion < questions.length){
-    //     nextButton.style.display = 'block'
-    // }
-    // else{
-    //     nextButton.style.display = 'none'
-    //     choicesElement.innerHTML = '<p>Quiz done! Thanks for playing.'
-    // }
+  currentQuestionIndex++; 
+  if (currentQuestionIndex === questions.length) {
+    quizEnd();
+  } else { 
+    getQuestion(); 
+  } 
+} 
+
+// End quiz by hiding questions//Stop timer, and show final score//
+function quizEnd() { 
+  clearInterval(timerid); 
+  const endScreenEl = document.getElementById("quiz-end"); 
+  endScreenEl.classList.remove("hide"); 
+
+  let finalScoreEl = document.getElementById("score-final"); 
+  finalScoreEl.textContent = time; 
+  questionElement.classList.add("hide"); 
+} 
+
+// Make sure clockTick is defined 
+function clockTick() { 
+  if (time > 0) { 
+    time--; 
+    timerElement.textContent = time; 
+  } else { 
+    quizEnd(); 
+  } 
+}
+
+// Attach the quizstart function to the start button
+startBtn.addEventListener("click", quizstart);
+
+// Save score in local storage & initials
+  
+function saveHighscore() { 
+  const name = nameEl.value.trim(); 
+  if (name !== "") 
+  { const highscores = JSON.parse(window.localStorage.getItem("highscores") ) || []; 
+    const newScore = {score: time, name: name, }; 
+    highscores.push(newScore); 
+    window.localStorage.setItem("highscores", JSON.stringify(highscores)); 
+    alert("Your Score has been Submitted"); 
+  } 
+} 
+
+// Save users' score after pressing enter 
+  
+function checkForEnter(event) { 
+  if (event.key === "Enter") {saveHighscore(); 
+      alert("Your Score has been Submitted"); 
+  } 
+} 
+nameEl.onkeyup = checkForEnter; 
+
+// Save users' score after clicking submit 
+
+submitBtn.onclick = saveHighscore; 
+
+// Start quiz after clicking start quiz 
+
+startBtn.onclick = quiz-start;
